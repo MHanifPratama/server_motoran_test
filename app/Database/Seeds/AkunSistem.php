@@ -12,7 +12,7 @@ class AkunSistem extends Seeder
             'apps_booking_number' => '1234567890',
             'akun' => 'admin',
             'password'=>'admin',
-            'bearer_token'=>'Bearer CisdG72iIKKsG8jUpjq95BuCWoFlVQ'
+            'bearer_token'=>'CisdG72iIKKsG8jUpjq95BuCWoFlVQ'
         ];
         $this->db->table('akun_sistem')->insert($data);
     }
