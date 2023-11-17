@@ -3,14 +3,16 @@
 namespace App\Controllers;
 use CodeIgniter\API\ResponseTrait;
 use App\Models\AkunSistem;
-
+use App\Models\SetstatusQuery;
 class EndPointMotoran extends BaseController
 {
     use ResponseTrait;
     private $akunSistem;
+    private $setstatus_query;
     public function __construct()
     {
         $this->akunSistem = new AkunSistem();
+        $this->setstatus_query = new SetstatusQuery();
     }
     public function receiveApiRequest()
     {
@@ -80,6 +82,11 @@ class EndPointMotoran extends BaseController
             'Status' => 1,
             'Message' => 'Data successfully submitted.'
         ];
+        $query = [
+            'query_data' => json_encode($data)
+        ];
+        
+        $this->setstatus_query->insertQuery($query);
         return $this->respond($response_data,200);
     }
     public function information_detail(){

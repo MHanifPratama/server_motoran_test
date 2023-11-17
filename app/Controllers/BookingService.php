@@ -13,7 +13,40 @@ class BookingService extends BaseController
     }
     public function index(): string
     {
-        return view('booking_service');
+        #Post API /api/mokita/v1/pit/availability
+        $curl = curl_init();
+        $authorizationHeader = 'Authorization: Bearer ' . $this->akunSistem->getAkunSistem()[0]['bearer_token'];
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'http://localhost:8096/api/mokita/v1/pit/availability',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => array(
+                'BookingType' => 'bengkel',
+                'BookDate' => date('Y-m-d'),
+                'AhassCode' => '16367',
+            ),
+            CURLOPT_HTTPHEADER => array(
+                $authorizationHeader,
+                'Cookie: session_id=79bbed810c5bc40290f62188fd04ea8285bb65a2; website_lang=en_US'
+            ),
+        ));
+        $response = curl_exec($curl);
+        curl_close($curl);
+        $data = json_decode($response, true);
+        if ($data['Status']==0){
+            $data_send = [
+                'status' => $data['Status'],
+                'msg' => $data['Message'],
+                'Data' => '[]'
+            ];
+            return view('booking_service',$data_send);
+        }
+        return view('booking_service',$data);
     }
     public function booking()
     {
